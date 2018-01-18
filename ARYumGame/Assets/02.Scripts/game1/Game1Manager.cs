@@ -12,10 +12,9 @@ public class Game1Manager : MonoBehaviour
     IEnumerator NextScene()
     {
         yield return new WaitForSeconds(1);
-        webcam.Stop();
         SceneManager.LoadScene("gameoverScene");
     }
-        public static Game1Manager instance; //어디서나 접근할 수 있도록 static(정적)으로 자기 자신을 저장할 변수를 만듭니다.
+    public static Game1Manager instance; //어디서나 접근할 수 있도록 static(정적)으로 자기 자신을 저장할 변수를 만듭니다.
     public GameObject pauseview; //일시정지 했을 때 뜨는 반투명 검정 창
     public Sprite[] ReadyCount = new Sprite[5]; //시작 전 5 4 3 2 1 카운트
 
