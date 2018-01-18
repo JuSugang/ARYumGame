@@ -12,7 +12,6 @@ public class Game1Manager : MonoBehaviour
     IEnumerator NextScene()
     {
         yield return new WaitForSeconds(1);
-        webcam.Stop();
         SceneManager.LoadScene("gameoverScene");
     }
         public static Game1Manager instance; //어디서나 접근할 수 있도록 static(정적)으로 자기 자신을 저장할 변수를 만듭니다.
@@ -69,7 +68,7 @@ public class Game1Manager : MonoBehaviour
         
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         WebCam.Init();  //웹캠 초기화
-        webcam = WebCam.Current;    //현재 웹캠을 가져옴
+        webcam = WebCam.Front;    //현재 웹캠을 가져옴
         webcam.Play();  //play한다.
 
         //판을 이동시킨다.
@@ -105,7 +104,7 @@ public class Game1Manager : MonoBehaviour
             return;
         }
 
-        var webcam = WebCam.Current;
+        var webcam = WebCam.Front;
         var pixels = webcam.GetPixels32();
         var width = webcam.width;
         var height = webcam.height;
@@ -217,7 +216,6 @@ public class Game1Manager : MonoBehaviour
 
     public void OnFace(IFaceData face, uint degree)
     {
-        face.Track();
         // Draw marks
         Vector2[] points = face.Landmark;
 

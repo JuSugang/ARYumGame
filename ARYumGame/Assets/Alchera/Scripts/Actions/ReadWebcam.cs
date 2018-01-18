@@ -21,8 +21,6 @@ namespace Alchera
 
         void Start()
         {
-            
-            processor = AppData.Get<IFrameProcessor>();
 
             WebCam.Init();
             var webcam = WebCam.Current;
@@ -47,8 +45,12 @@ namespace Alchera
             uint degree = (uint)(540 - webcam.videoRotationAngle);
 
             Profiler.BeginSample("FrameProcess");
-            if(processor != null)
-                processor.OnFrame(frame, degree);
+            if(processor == null){
+                processor = AppData.Get<IFrameProcessor>();
+                Debug.Log(processor);
+            }
+            processor.OnFrame(frame, degree);
+
             Profiler.EndSample();
         }
 

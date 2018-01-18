@@ -30,15 +30,18 @@ namespace Alchera
         /// Version string on GUI
         /// </summary>
         public Text VersionLabel;
+        public Text PositionLabel;
+
+        public GameObject glassObject;
+        public GameObject headObject;
 
         void Start()
         {
             detector = Alchera.Module.Face();
 			VersionLabel.text = detector.Version;
 
-            // filter = face1.GetComponent<MeshFilter>();
-            // filter.mesh = detector.NormalFace;
-            // filter.mesh = detector.DenseFace;
+            filter = face1.GetComponent<MeshFilter>();
+            filter.mesh = Alchera.FaceMesh.Normal;
 
             AppData.Set<IFrameProcessor>(this);
         }
@@ -57,10 +60,14 @@ namespace Alchera
         public void OnFrame(FrameData frame, uint degree)
         {
             face1.SetActive(false);
+            glassObject.SetActive(false);
+            headObject.SetActive(false);
             foreach (IFaceData face in detector.Faces(ref frame, (uint)degree))
             {
                 OnFace(face, degree);
-                face1.SetActive(true);
+                //face1.SetActive(true);
+                glassObject.SetActive(true);
+                headObject.SetActive(true);
                 break; // use only 1 face
             }
         }
@@ -69,47 +76,51 @@ namespace Alchera
         {
             // Debug.Log(degree);
             var tex2d = (Texture2D)material.mainTexture;
-            // Debug.Log(face.ID);
+            var glassTransform = glassObject.transform;
+            var headTransform = headObject.transform;
+            // Draw marks
+            Marker.Points(tex2d, face.Landmark, Color.green);
+            tex2d.Apply(false);
 
-            //// We can save only when a face is detected
-            //if (Input.GetKeyUp(KeyCode.BackQuote))
-                //StartCoroutine(SaveTexture(tex2d, (int)degree));
+            var mesh = filter.mesh;
+            FaceMesh.MorphWith(mesh, face);
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
 
-            face.Track();
+            var camRotation = Quaternion.AngleAxis(degree, Vector3.back);
+            var rotation = camRotation * face.Rotation;
+            var position = Matrix4x4.Rotate(camRotation) * face.Position;
 
-            float total = 0;
-            foreach (var p in face.Animation)
+            var webcam = WebCam.Current;
+            if (webcam == WebCam.Front)
             {
-                total += p;
+                rotation.x = -rotation.x;
+                rotation.y = -rotation.y;
+            }
+            else
+            {
+                position.x = -position.x;
+
+                rotation.x = -rotation.x;
+                rotation.z = -rotation.z;
             }
 
-            Debug.LogFormat("Shape Total: {0}, Position: {1}, Rotation: {2}", 
-                            total, face.Position, 
-                            face.Rotation);
+            position.x *= 1.1f;
+            position.y *= 1.1f;
+            position.z *= 0.44f;
 
+            face1.transform.localPosition = position;
+            face1.transform.localRotation = rotation;
 
-            face1.transform.localPosition = face.Position;
-            face1.transform.localRotation = Quaternion.AngleAxis(
-                degree, Vector3.back) * face.Rotation;
+            glassTransform.localPosition = position;
+            glassTransform.localRotation = rotation;
 
+            headTransform.localPosition = position;
+            headTransform.localRotation = rotation;
 
-            Marker.Points(tex2d, face.Landmark, Color.blue);
-            tex2d.Apply(false);
+            PositionLabel.text = string.Format("{0} {1}", position, rotation);
         }
 
-        IEnumerator SaveTexture(Texture2D tex2d, int degree)
-        {
-            yield return new WaitForEndOfFrame();
-            var png = tex2d.EncodeToPNG();
-
-            var time = System.DateTime.Now;
-            var path = string.Format("{0}/{2}-{1}.png",
-                                     Application.persistentDataPath,
-                                     time.ToString("yyyyMMdd-HH-mmss"),
-                                     degree);
-            File.WriteAllBytes(path, png);
-            Debug.Log(path);
-        }
     }
 
 }

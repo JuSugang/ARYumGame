@@ -60,7 +60,7 @@ namespace Alchera
             }
 
             // Default camera is Rear
-            if (Front == null)
+            if (Rear == null)
             {
                 Current = Rear;
                 Debug.Log("Using Rear Webcam...");
