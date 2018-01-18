@@ -11,12 +11,11 @@ public class Game1Manager : MonoBehaviour
 {
     IEnumerator NextScene()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         webcam.Stop();
         SceneManager.LoadScene("gameoverScene");
     }
-
-    public static Game1Manager instance; //어디서나 접근할 수 있도록 static(정적)으로 자기 자신을 저장할 변수를 만듭니다.
+        public static Game1Manager instance; //어디서나 접근할 수 있도록 static(정적)으로 자기 자신을 저장할 변수를 만듭니다.
     public GameObject pauseview; //일시정지 했을 때 뜨는 반투명 검정 창
     public Sprite[] ReadyCount = new Sprite[5]; //시작 전 5 4 3 2 1 카운트
 
@@ -82,7 +81,6 @@ public class Game1Manager : MonoBehaviour
         capture.mainTexture = tex2d;
 
         module = Alchera.Module.Face();
-
         //Debug.Log(module);
         Debug.Log(module.Version);
 
@@ -97,7 +95,8 @@ public class Game1Manager : MonoBehaviour
 
     void Update()
     {
-        //if (module == null)//모듈이 없으면 스킵한다.
+        //off
+        if (module == null)//모듈이 없으면 스킵한다.
         {
             Debug.LogError("Detection module is null");
             Application.Quit();
@@ -112,10 +111,11 @@ public class Game1Manager : MonoBehaviour
         tex2d.Apply();
 
         var degree = 540 - webcam.videoRotationAngle;
-        //var frame = Alchera.FrameData.Process(tex2d);
+        //off
+        var frame = Alchera.FrameData.Process(tex2d);
         if (pauseFlag == false)
         {
-            ////off
+            //off
             int detectCnt = 0;
             foreach (IFaceData face in module.Faces(ref frame, (uint)degree))
             {
@@ -151,6 +151,7 @@ public class Game1Manager : MonoBehaviour
                     ReadyImage.SetActive(false);
                     startFlag = true;
                 }
+            //off
             }
         }
         if (Application.platform == RuntimePlatform.Android)
@@ -207,7 +208,7 @@ public class Game1Manager : MonoBehaviour
     public void Resume() { pauseFlag = false; pauseview.SetActive(false); Sound1Manager.instance.PlayBGM(); } //재생 버튼 리스너에추가
     public void Restart() { quitSceneFlag = true; pauseFlag = false; SceneManager.LoadScene("game1Scene"); } //재시작 버튼 리스너에추가
     public void Exit() { quitSceneFlag = true; SceneManager.LoadScene("homeScene"); } //홈 버튼 리스너에추가
-    public void GameOver() { quitSceneFlag = true; EndImage.SetActive(true); StartCoroutine(NextScene()); } //시간이 다된경우 호출
+    public void GameOver() { Sound1Manager.instance.PauseBGM(); quitSceneFlag = true; EndImage.SetActive(true); StartCoroutine(NextScene()); } //시간이 다된경우 호출
 
 
     public void OnFace(IFaceData face, uint degree)

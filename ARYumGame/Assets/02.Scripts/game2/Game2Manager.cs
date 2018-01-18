@@ -11,7 +11,7 @@ public class Game2Manager : MonoBehaviour
 {
     IEnumerator NextScene()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         webcam.Stop();
         SceneManager.LoadScene("gameoverScene");
     }
@@ -70,21 +70,6 @@ public class Game2Manager : MonoBehaviour
     void Start()
     {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
-        startFlag = false;
-        pauseFlag = false;
-        debugFlag = false;
-        badFlag = false;
-        detectFlag = false;
-        quitSceneFlag = false;
-        detectPanel.SetActive(true);
-        DebugPanel.SetActive(false);
-        pauseview.SetActive(false); //일시정지를 안보이게 한다.
-        playerMesh = player.GetComponent<MeshRenderer>();
-        faceMesh = face1.GetComponent<MeshRenderer>();
-        playerMesh.enabled = false;
-        faceMesh.enabled = false;
-        faceMesh.material.color = new Color(1, 1, 1, 0.2f);
-
         WebCam.Init();  //웹캠 초기화
         webcam = WebCam.Current;    //현재 웹캠을 가져옴
         webcam.Play();  //play한다.
@@ -102,6 +87,20 @@ public class Game2Manager : MonoBehaviour
         //Debug.Log(module);
         Debug.Log(module.Version);
 
+        startFlag = false;
+        pauseFlag = false;
+        debugFlag = false;
+        badFlag = false;
+        detectFlag = false;
+        quitSceneFlag = false;
+        detectPanel.SetActive(true);
+        DebugPanel.SetActive(false);
+        pauseview.SetActive(false); //일시정지를 안보이게 한다.
+        playerMesh = player.GetComponent<MeshRenderer>();
+        faceMesh = face1.GetComponent<MeshRenderer>();
+        playerMesh.enabled = false;
+        faceMesh.enabled = false;
+        faceMesh.material.color = new Color(1, 1, 1, 0.2f);
 
     }
     unsafe void Update()
@@ -229,6 +228,7 @@ public class Game2Manager : MonoBehaviour
     public void Restart() { pauseFlag = false; quitSceneFlag = true; SceneManager.LoadScene("game2Scene"); } //재시작 버튼 리스너에추가
     public void Exit() { quitSceneFlag = true; SceneManager.LoadScene("homeScene"); } //홈 버튼 리스너에추가
     public void GameOver() {
+        Sound2Manager.instance.PauseBGM();
         quitSceneFlag = true;
         EndImage.SetActive(true);
         StartCoroutine(NextScene());

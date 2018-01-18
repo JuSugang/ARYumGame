@@ -10,6 +10,8 @@ public class Sound1Manager : MonoBehaviour
     private AudioSource eatBadSource;
     private AudioSource eatGoodSource;
     private AudioSource BGMSource;
+
+
     void Awake() //다른 곳에서도 인스턴스를 접근할 수 있도록 static instance를 만들어 놓습니다.
     {
         if (!instance) //정적으로 자신을 체크합니다.
