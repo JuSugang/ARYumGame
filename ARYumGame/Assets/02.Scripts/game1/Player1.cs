@@ -55,8 +55,8 @@ public class Player1 : MonoBehaviour {
     {
         GameObject[] foods = GameObject.FindGameObjectsWithTag("eatting");
         foreach (GameObject food in foods)
-            GameObject.Destroy(food);
-
+        GameObject.Destroy(food);
+        
     }
     void move()
     {

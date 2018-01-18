@@ -42,7 +42,6 @@ public class Food1Manager : MonoBehaviour {
         
         if (this.tag == "eatting")
         {
-            Debug.Log(this.tag);
             Hightlight.GetComponent<MeshRenderer>().enabled = true;
         }
     }
@@ -65,12 +64,15 @@ public class Food1Manager : MonoBehaviour {
             if (myScore > 0)
             {
                 GameObject explode = (GameObject)Instantiate(explosion, pos + new Vector3(0, 2, 1), angle);
+                Sound1Manager.instance.EatGoodSound();
             }
             else
             {
                 GameObject explode = (GameObject)Instantiate(explosion, pos + new Vector3(0, 0, 1), angle);
                 Game1Manager.instance.badFlag = true;
                 Handheld.Vibrate();
+                Sound1Manager.instance.EatBadSound();
+                
                 Bar1Script.instance.TimePanelty(1);
             }
             GameObject score = (GameObject)Instantiate(Score, pos, angle);

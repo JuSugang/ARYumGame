@@ -66,6 +66,7 @@ public class Game1Manager : MonoBehaviour
 
     void Start()
     {
+        
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         WebCam.Init();  //웹캠 초기화
         webcam = WebCam.Current;    //현재 웹캠을 가져옴
@@ -91,11 +92,12 @@ public class Game1Manager : MonoBehaviour
         detectPanel.SetActive(true);
         pauseview.SetActive(false); //일시정지를 안보이게 한다.
         ReadyImage.SetActive(false);
+        
     }
 
     void Update()
     {
-        if (module == null)//모듈이 없으면 스킵한다.
+        //if (module == null)//모듈이 없으면 스킵한다.
         {
             Debug.LogError("Detection module is null");
             Application.Quit();
@@ -110,7 +112,7 @@ public class Game1Manager : MonoBehaviour
         tex2d.Apply();
 
         var degree = 540 - webcam.videoRotationAngle;
-        var frame = Alchera.FrameData.Process(tex2d);
+        //var frame = Alchera.FrameData.Process(tex2d);
         if (pauseFlag == false)
         {
             ////off
@@ -197,8 +199,12 @@ public class Game1Manager : MonoBehaviour
         }
     } //음식을 먹을 때 호출
 
-    public void SetPause() { pauseFlag = true; pauseview.SetActive(true); } //일시정지 버튼 리스너에추가
-    public void Resume() { pauseFlag = false; pauseview.SetActive(false); } //재생 버튼 리스너에추가
+    public void SetPause() {
+        pauseFlag = true;
+        pauseview.SetActive(true);
+        Sound1Manager.instance.PauseBGM();
+    } //일시정지 버튼 리스너에추가
+    public void Resume() { pauseFlag = false; pauseview.SetActive(false); Sound1Manager.instance.PlayBGM(); } //재생 버튼 리스너에추가
     public void Restart() { quitSceneFlag = true; pauseFlag = false; SceneManager.LoadScene("game1Scene"); } //재시작 버튼 리스너에추가
     public void Exit() { quitSceneFlag = true; SceneManager.LoadScene("homeScene"); } //홈 버튼 리스너에추가
     public void GameOver() { quitSceneFlag = true; EndImage.SetActive(true); StartCoroutine(NextScene()); } //시간이 다된경우 호출

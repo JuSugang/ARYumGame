@@ -44,12 +44,14 @@ public class Food2Manager : MonoBehaviour
             if (myScore > 0)
             {
                 GameObject explode = (GameObject)Instantiate(explosion, pos + new Vector3(0, 3, 1), angle);
+                Sound2Manager.instance.EatGoodSound();
             }
             else
             {
                 GameObject explode = (GameObject)Instantiate(explosion, pos + new Vector3(0, 3, 1), angle);
                 Game2Manager.instance.badFlag = true;
                 Handheld.Vibrate();
+                Sound2Manager.instance.EatBadSound();
                 Bar2Script.instance.TimePanelty(1);
             }
             GameObject score = (GameObject)Instantiate(Score, pos+ new Vector3(0, 2, 0), angle);

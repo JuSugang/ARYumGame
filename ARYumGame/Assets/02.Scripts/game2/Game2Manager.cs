@@ -220,8 +220,12 @@ public class Game2Manager : MonoBehaviour
             ScoreText.text = score + "";
         }
     } //음식을 먹을 때 호출
-    public void SetPause() { pauseFlag = true; pauseview.SetActive(true); } //일시정지 버튼 리스너에추가
-    public void Resume() { pauseFlag = false; pauseview.SetActive(false); } //재생 버튼 리스너에추가
+    public void SetPause() {
+        pauseFlag = true;
+        pauseview.SetActive(true);
+        Sound2Manager.instance.PauseBGM();
+    } //일시정지 버튼 리스너에추가
+    public void Resume() { pauseFlag = false; pauseview.SetActive(false); Sound2Manager.instance.PlayBGM(); } //재생 버튼 리스너에추가
     public void Restart() { pauseFlag = false; quitSceneFlag = true; SceneManager.LoadScene("game2Scene"); } //재시작 버튼 리스너에추가
     public void Exit() { quitSceneFlag = true; SceneManager.LoadScene("homeScene"); } //홈 버튼 리스너에추가
     public void GameOver() {

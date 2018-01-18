@@ -56,6 +56,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4376617642939378}
+  - component: {fileID: 114886385151230282}
   m_Layer: 0
   m_Name: Rock0Obj (5)
   m_TagString: Untagged
@@ -212,6 +213,17 @@ MonoBehaviour:
   Score: {fileID: 1441180568484728, guid: 40cc8d13f79c1e14b90cba1df13ec3ff, type: 2}
   explosion: {fileID: 1818067489452580, guid: c1616f4be704dc942990f43ef9753e61, type: 2}
   Hightlight: {fileID: 1769229037175346}
+--- !u!114 &114886385151230282
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1980491131648452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62d5854517c6fa448b309267c74c25fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!135 &135243613229322994
 SphereCollider:
   m_ObjectHideFlags: 1
