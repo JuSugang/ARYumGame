@@ -38,7 +38,7 @@ public class Game1Manager : MonoBehaviour
     Texture2D tex2d;    //메테리얼에 있는 texture2d 가져올 목적으로 만든 임시 텍스쳐
     WebCamTexture webcam; //static webcam을 저장해둘 곳
     
-        
+       
     private int index; //ready를 세기 위한 인덱스
     private float count = 0.001f;
     private int score = 0; //점수를 관리합니다.
@@ -49,6 +49,7 @@ public class Game1Manager : MonoBehaviour
     public bool quitSceneFlag { get; private set; }
     public bool badFlag=false;
     public bool debugFlag=false;
+    private bool startSureFlag = false;
     public GameObject DebugPanel;
     public Text HorTxt;
     public Text VerTxt;
@@ -89,7 +90,8 @@ public class Game1Manager : MonoBehaviour
         detectPanel.SetActive(true);
         pauseview.SetActive(false); //일시정지를 안보이게 한다.
         ReadyImage.SetActive(false);
-        
+
+        startSureFlag = true;
     }
 
     void Update()
@@ -164,14 +166,16 @@ public class Game1Manager : MonoBehaviour
     }
     private void OnApplicationPause(bool pause)
     {
-        if (pause)
-        {
-            SetPause();
-            webcam.Stop();
-        }
-        else
-        {
-            webcam.Play();
+        if(startSureFlag ==true){
+            if (pause)
+            {
+                SetPause();
+                webcam.Stop();
+            }
+            else
+            {
+                webcam.Play();
+            }
         }
     }
     public void toggleDebug()
@@ -212,6 +216,7 @@ public class Game1Manager : MonoBehaviour
 
     public void OnFace(IFaceData face, uint degree)
     {
+        face.Track();
         // Draw marks
         Vector2[] points = face.Landmark;
 

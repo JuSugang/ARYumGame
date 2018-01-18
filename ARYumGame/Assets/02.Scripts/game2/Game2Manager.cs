@@ -50,11 +50,10 @@ public class Game2Manager : MonoBehaviour
     public bool startFlag { get; set; }
     public bool pauseFlag { get; private set; }
     public bool quitSceneFlag { get; private set; }
-
     public bool badFlag;
     private bool detectFlag;
     public bool debugFlag;
-
+    private bool startSureFlag = false;
     public GameObject DebugPanel;
     public Text HorTxt;
     public Text VerTxt;
@@ -101,6 +100,7 @@ public class Game2Manager : MonoBehaviour
         faceMesh.enabled = false;
         faceMesh.material.color = new Color(1, 1, 1, 0.2f);
 
+        startSureFlag = true;
     }
     unsafe void Update()
     {
@@ -200,14 +200,17 @@ public class Game2Manager : MonoBehaviour
     }
     private void OnApplicationPause(bool pause)
     {
-        if (pause)
+        if (startSureFlag == true)
         {
-            SetPause();
-            webcam.Stop();
-        }
-        else
-        {
-            webcam.Play();
+            if (pause)
+            {
+                SetPause();
+                webcam.Stop();
+            }
+            else
+            {
+                webcam.Play();
+            }
         }
     }
     public void AddScore(int num)

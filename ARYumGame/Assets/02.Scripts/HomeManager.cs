@@ -8,6 +8,7 @@ public class HomeManager : MonoBehaviour {
     Texture2D tex2d;    //메테리얼에 있는 texture2d 가져올 목적으로 만든 임시 텍스쳐
     WebCamTexture webcam; //static webcam을 저장해둘 곳
     public GameObject backgroundQuad;
+    private bool startSureFlag=false;
     void Start () {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         WebCam.Init();  //웹캠 초기화
@@ -22,6 +23,7 @@ public class HomeManager : MonoBehaviour {
         //텍스쳐를 만들고 메테리얼에 붙여둔다.
         tex2d = new Texture2D(webcam.requestedWidth, webcam.requestedHeight, TextureFormat.ARGB32, false);
         capture.mainTexture = tex2d;
+        startSureFlag = true;
     }
 
     // Update is called once per frame
@@ -50,13 +52,16 @@ public class HomeManager : MonoBehaviour {
     }
     private void OnApplicationPause(bool pause)
     {
-        if (pause)
+        if (startSureFlag == true)
         {
-            webcam.Stop();
-        }
-        else
-        {
-            webcam.Play();
+            if (pause)
+            {
+                webcam.Stop();
+            }
+            else
+            {
+                webcam.Play();
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ public class GameoverManager : MonoBehaviour {
     Texture2D tex2d;    //메테리얼에 있는 texture2d 가져올 목적으로 만든 임시 텍스쳐
     WebCamTexture webcam; //static webcam을 저장해둘 곳
     public GameObject backgroundQuad;
+    private bool startSureFlag = false;
     private void Start()
     {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
@@ -32,6 +33,7 @@ public class GameoverManager : MonoBehaviour {
         score =PlayerPrefs.GetInt("Score", 0);
         ScoreText.text = score+"";
         status = PlayerPrefs.GetString("Status", "null");
+        startSureFlag = true;
     }
     private void Update()
     {
@@ -59,14 +61,15 @@ public class GameoverManager : MonoBehaviour {
     }
     private void OnApplicationPause(bool pause)
     {
-        if (pause)
-        {
-            webcam.Stop();
-        }
-        else
-        {
-            webcam.Play();
+        if(startSureFlag==true){
+            if (pause)
+            {
+                webcam.Stop();
+            }
+            else
+            {
+                webcam.Play();
+            }
         }
     }
-
 }
