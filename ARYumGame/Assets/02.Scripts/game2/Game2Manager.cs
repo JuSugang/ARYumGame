@@ -12,6 +12,7 @@ public class Game2Manager : MonoBehaviour
     IEnumerator NextScene()
     {
         yield return new WaitForSeconds(1);
+        webcam.Stop();
         SceneManager.LoadScene("gameoverScene");
     }
     public static Game2Manager instance; //어디서나 접근할 수 있도록 static(정적)으로 자기 자신을 저장할 변수를 만듭니다.
@@ -275,7 +276,7 @@ public class Game2Manager : MonoBehaviour
         //-----------------입 그리기--------------
         Vector3 pos = new Vector3(-1 * resizeX, resizeY, 20);
         player.transform.position = pos;
-        player.transform.localScale = new Vector3(HorRadius / 12, VerRadius / 8, 1);
+        player.transform.localScale = new Vector3(HorRadius / 12, VerRadius / 12, 1);
         Quaternion PlayerAngle = Quaternion.Euler(0, 0, Mathf.Atan2(y2 - y1, x1 - x2) * 180 / Mathf.PI);
         player.transform.rotation = PlayerAngle;
 
