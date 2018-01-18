@@ -239,6 +239,8 @@ public class Game2Manager : MonoBehaviour
 
     public void OnFace(IFaceData face, uint degree)
     {
+
+        face.Track();
         // Draw marks
         Vector2[] points = face.Landmark;
         if (debugFlag == true)
