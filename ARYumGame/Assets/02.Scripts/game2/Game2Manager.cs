@@ -50,6 +50,7 @@ public class Game2Manager : MonoBehaviour
     MeshRenderer faceMesh;
     public bool startFlag { get; set; }
     public bool pauseFlag { get; private set; }
+    public bool quitSceneFlag { get; private set; }
 
     public bool badFlag;
     private bool detectFlag;
@@ -68,11 +69,13 @@ public class Game2Manager : MonoBehaviour
     }
     void Start()
     {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
         startFlag = false;
         pauseFlag = false;
         debugFlag = false;
         badFlag = false;
         detectFlag = false;
+        quitSceneFlag = false;
         detectPanel.SetActive(true);
         DebugPanel.SetActive(false);
         pauseview.SetActive(false); //일시정지를 안보이게 한다.
@@ -168,7 +171,7 @@ public class Game2Manager : MonoBehaviour
         }
         if (Application.platform == RuntimePlatform.Android)
         {
-            if (Input.GetKey(KeyCode.Escape))
+            if (Input.GetKey(KeyCode.Escape) || Input.GetKey(KeyCode.Menu))
             {
                 SetPause();
             }
@@ -197,7 +200,18 @@ public class Game2Manager : MonoBehaviour
         PlayerPrefs.SetInt("Score", score);
         PlayerPrefs.SetString("Status", "game2Scene");
     }
-
+    private void OnApplicationPause(bool pause)
+    {
+        if (pause)
+        {
+            SetPause();
+            webcam.Stop();
+        }
+        else
+        {
+            webcam.Play();
+        }
+    }
     public void AddScore(int num)
     {
         if (startFlag == true)
@@ -208,10 +222,10 @@ public class Game2Manager : MonoBehaviour
     } //음식을 먹을 때 호출
     public void SetPause() { pauseFlag = true; pauseview.SetActive(true); } //일시정지 버튼 리스너에추가
     public void Resume() { pauseFlag = false; pauseview.SetActive(false); } //재생 버튼 리스너에추가
-    public void Restart() { pauseFlag = false; SceneManager.LoadScene("game2Scene"); } //재시작 버튼 리스너에추가
-    public void Exit() { SceneManager.LoadScene("homeScene"); } //홈 버튼 리스너에추가
+    public void Restart() { pauseFlag = false; quitSceneFlag = true; SceneManager.LoadScene("game2Scene"); } //재시작 버튼 리스너에추가
+    public void Exit() { quitSceneFlag = true; SceneManager.LoadScene("homeScene"); } //홈 버튼 리스너에추가
     public void GameOver() {
-        
+        quitSceneFlag = true;
         EndImage.SetActive(true);
         StartCoroutine(NextScene());
     } //시간이 다된경우 호출

@@ -413,6 +413,7 @@ GameObject:
   - component: {fileID: 1145608121}
   - component: {fileID: 1145608124}
   - component: {fileID: 1145608123}
+  - component: {fileID: 1145608125}
   - component: {fileID: 1145608122}
   m_Layer: 5
   m_Name: ReplayButton
@@ -524,6 +525,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1145608120}
+--- !u!114 &1145608125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1145608120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75c8691a25451da4b8ee14e6e3521b2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: {fileID: 8300000, guid: bdb31265e248c3b41913c637af1c9e49, type: 3}
 --- !u!1 &1217846661
 GameObject:
   m_ObjectHideFlags: 0
@@ -534,6 +547,7 @@ GameObject:
   - component: {fileID: 1217846662}
   - component: {fileID: 1217846665}
   - component: {fileID: 1217846664}
+  - component: {fileID: 1217846666}
   - component: {fileID: 1217846663}
   m_Layer: 5
   m_Name: HomeButton
@@ -645,6 +659,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1217846661}
+--- !u!114 &1217846666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1217846661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75c8691a25451da4b8ee14e6e3521b2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: {fileID: 8300000, guid: bdb31265e248c3b41913c637af1c9e49, type: 3}
 --- !u!1 &1367912917
 GameObject:
   m_ObjectHideFlags: 0

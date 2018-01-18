@@ -37,7 +37,7 @@ public class Food2Manager : MonoBehaviour
     }
     private void OnDestroy()
     {
-        if (paleFlag == false)
+        if (paleFlag == false&& Game2Manager.instance.quitSceneFlag == false)
         { //상하지 않았는데 파괴되면, 먹힌것으로 가정하여 현재 위치에 점수를 띄우고, 점수를 합산한다.
             Vector3 pos = transform.position;
             Quaternion angle = Quaternion.Euler(0, 0, 0);
@@ -49,6 +49,7 @@ public class Food2Manager : MonoBehaviour
             {
                 GameObject explode = (GameObject)Instantiate(explosion, pos + new Vector3(0, 3, 1), angle);
                 Game2Manager.instance.badFlag = true;
+                Handheld.Vibrate();
                 Bar2Script.instance.TimePanelty(1);
             }
             GameObject score = (GameObject)Instantiate(Score, pos+ new Vector3(0, 2, 0), angle);

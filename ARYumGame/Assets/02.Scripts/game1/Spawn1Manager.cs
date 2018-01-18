@@ -41,7 +41,7 @@ public class Spawn1Manager : MonoBehaviour {
     void SpawnFood(bool flag)
     {
         //위치,회전각,물체 랜덤설정
-        float randomX = Random.Range(-22f, 22f); 
+        float randomX = Random.Range(-20f, 20f); 
         float randomY = Random.Range(-11f, 3f);
         Quaternion angle = Quaternion.Euler(Random.Range(-90f, 90f), Random.Range(-90f, 90f), Random.Range(-20f, 20f));
         //생성된 값으로 food를 만들고, 적당히 키워준다.

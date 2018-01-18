@@ -10,7 +10,8 @@ public class GameoverManager : MonoBehaviour {
     public Text ScoreText;
     private void Start()
     {
-        score=PlayerPrefs.GetInt("Score", 0);
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        score =PlayerPrefs.GetInt("Score", 0);
         ScoreText.text = score+"";
         status = PlayerPrefs.GetString("Status", "null");
     }
@@ -32,4 +33,5 @@ public class GameoverManager : MonoBehaviour {
     {
         SceneManager.LoadScene("homeScene");
     }
+
 }
