@@ -19,9 +19,12 @@ public class DestroyFood : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        else
+        else 
         {
-            count++;
+            if (Game1Manager.instance.pauseFlag == false)
+            {
+                count++;
+            }
         }
     }
 }

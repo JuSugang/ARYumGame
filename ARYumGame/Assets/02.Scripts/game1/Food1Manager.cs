@@ -59,6 +59,7 @@ public class Food1Manager : MonoBehaviour {
     {
         if(aliveFlag == true && paleFlag==false &&Game1Manager.instance.quitSceneFlag==false)
         { //상하지 않았는데 파괴되면, 먹힌것으로 가정하여 현재 위치에 점수를 띄우고, 점수를 합산한다.
+            Debug.Log(paleFlag);
             Vector3 pos= transform.position;
             Quaternion angle = Quaternion.Euler(0,0,0);
             if (myScore > 0)

@@ -14,7 +14,7 @@ public class Game1Manager : MonoBehaviour
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene("gameoverScene");
     }
-        public static Game1Manager instance; //어디서나 접근할 수 있도록 static(정적)으로 자기 자신을 저장할 변수를 만듭니다.
+    public static Game1Manager instance; //어디서나 접근할 수 있도록 static(정적)으로 자기 자신을 저장할 변수를 만듭니다.
     public GameObject pauseview; //일시정지 했을 때 뜨는 반투명 검정 창
     public Sprite[] ReadyCount = new Sprite[5]; //시작 전 5 4 3 2 1 카운트
 
@@ -55,6 +55,10 @@ public class Game1Manager : MonoBehaviour
     public Text VerTxt;
     public Text TarTxt;
     public Text RealTxt;
+
+
+    /////
+    public GameObject faceCenter;
 
 
     void Awake() //다른 곳에서도 인스턴스를 접근할 수 있도록 static instance를 만들어 놓습니다.
@@ -104,7 +108,7 @@ public class Game1Manager : MonoBehaviour
             return;
         }
 
-        var webcam = WebCam.Front;
+        webcam = WebCam.Front;
         var pixels = webcam.GetPixels32();
         var width = webcam.width;
         var height = webcam.height;
@@ -113,9 +117,8 @@ public class Game1Manager : MonoBehaviour
 
         var degree = 540 - webcam.videoRotationAngle;
         //off
-        var frame = Alchera.FrameData.Process(tex2d);
-        if (pauseFlag == false)
-        {
+        frame = Alchera.FrameData.Process(tex2d);
+        if (pauseview.activeSelf == false){
             //off
             int detectCnt = 0;
             foreach (IFaceData face in module.Faces(ref frame, (uint)degree))
@@ -124,8 +127,10 @@ public class Game1Manager : MonoBehaviour
                 detectCnt++;
                 break;
             }
+
             if (detectCnt == 0)
             {
+                pauseFlag = true;
                 detectingText.text = "인식실패";
                 detectingSign.overrideSprite = detectFail;
                 if (startFlag == false)
@@ -136,6 +141,7 @@ public class Game1Manager : MonoBehaviour
             }
             else
             {
+                pauseFlag = false;
                 detectPanel.SetActive(false);
                 detectingText.text = "인식중";
                 detectingSign.overrideSprite = detectSuccess;
@@ -152,7 +158,6 @@ public class Game1Manager : MonoBehaviour
                     ReadyImage.SetActive(false);
                     startFlag = true;
                 }
-            //off
             }
         }
         if (Application.platform == RuntimePlatform.Android)
@@ -216,6 +221,7 @@ public class Game1Manager : MonoBehaviour
 
     public void OnFace(IFaceData face, uint degree)
     {
+        //face.Track();
         // Draw marks
         Vector2[] points = face.Landmark;
 
@@ -228,7 +234,8 @@ public class Game1Manager : MonoBehaviour
                 DrawPoint(tex2d, points[i], Color.green);
             }
         }
-        
+
+
         float x1 = points[96].x;
         float y1 = points[96].y;
         float x2 = points[100].x;
@@ -239,18 +246,22 @@ public class Game1Manager : MonoBehaviour
         float y4 = points[102].y;
         float HorRadius = Mathf.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
         float VerRadius = Mathf.Sqrt((x3 - x4) * (x3 - x4) + (y3 - y4) * (y3 - y4));
-        float centerXInView = (x1 + x2) / 2 - 320;
-        float centerYInView = (y1 + y2) / 2 - 240;
-        float resizeX = centerXInView * (float)24 / 250;
-        float resizeY = centerYInView * (float)15.8 / 150;
+        //float centerXInView = (x1 + x2) / 2 - 320;
+        //float centerYInView = (y1 + y2) / 2 - 240;
+        //float resizeX = centerXInView * (float)24 / 250;
+        //float resizeY = centerYInView * (float)15.8 / 150;
+        float centerXInView = (x1 + x2) / 2 - 640;
+        float centerYInView = (y1 + y2) / 2 - 360;
+        float resizeX = centerXInView * 0.047f;
+        float resizeY = centerYInView * 0.06f;
 
         //충돌검사용 원 생성
         Vector3 pos = new Vector3(-1*resizeX,resizeY,20);
         player.transform.position = pos;
-        player.transform.localScale = new Vector3(HorRadius / 12, VerRadius / 12, 1);
+        player.transform.localScale = new Vector3(HorRadius / 22, VerRadius / 18, 1);
         Quaternion PlayerAngle = Quaternion.Euler(0, 0, Mathf.Atan2(y2 - y1, x1 - x2) * 180 / Mathf.PI);
         player.transform.rotation=PlayerAngle;
-
+        faceCenter.transform.position = pos;
 
         //입 열고닫음 여부 확인
         if (VerRadius / HorRadius > 0.4 && startFlag == true)
@@ -264,8 +275,10 @@ public class Game1Manager : MonoBehaviour
       
         for(int i = 0; i < 2; i++)
         {
-            float eyeX = (points[104 + i].x - 320) * (float)24 / 250 ;
-            float eyeY = (points[104 + i].y - 240) * (float)15.8 / 150 ;
+            //float eyeX = (points[104 + i].x - 320) * (float)24 / 250 ;
+            //float eyeY = (points[104 + i].y - 240) * (float)15.8 / 150 ;
+            float eyeX = (points[104 + i].x - 640) * 0.047f;
+            float eyeY = (points[104 + i].y - 360) * 0.06f;
             Vector3 eyepos = new Vector3(-1 * eyeX, eyeY, 22);
             
 
@@ -278,12 +291,13 @@ public class Game1Manager : MonoBehaviour
             {
                 bad[i].transform.position = eyepos;
                 bad[i].transform.localScale = new Vector3(HorRadius / 17, HorRadius / 17, 1);
+                bad[i].transform.localScale = new Vector3(HorRadius / 26, HorRadius / 26, 1);
             }
         }
         badFlag = false;
 
-        HorTxt.text = "입 가로길이 :" +HorRadius;
-        VerTxt.text = "입 세로길이 : " + VerRadius;
+        HorTxt.text = ""+face.Rotation.eulerAngles;
+        VerTxt.text = "위치:" +face.Position;
         TarTxt.text = "목표비율: " + 0.4;
         RealTxt.text = "실제비율 : " + VerRadius / HorRadius;
         tex2d.Apply();
@@ -312,4 +326,6 @@ public class Game1Manager : MonoBehaviour
         tex2d.SetPixel(x - 1, y - 1, color);
         tex2d.SetPixel(x - 2, y - 1, color);
     }
+
+
 }

@@ -60,6 +60,10 @@ public class Game2Manager : MonoBehaviour
     public Text TarTxt;
     public Text RealTxt;
 
+    /////
+    public GameObject faceCenter;
+
+
     void Awake()
     {
         if (!instance) //정적으로 자신을 체크합니다.
@@ -112,7 +116,7 @@ public class Game2Manager : MonoBehaviour
             return;
         }
 
-        var webcam = WebCam.Front;
+        webcam = WebCam.Front;
         var pixels = webcam.GetPixels32();
         var width = webcam.width;
         var height = webcam.height;
@@ -121,8 +125,8 @@ public class Game2Manager : MonoBehaviour
 
         var degree = 540 - webcam.videoRotationAngle;
         //off
-        var frame = Alchera.FrameData.Process(tex2d);
-        if (pauseFlag == false)
+        frame = Alchera.FrameData.Process(tex2d);
+        if (pauseview.activeSelf == false)
         {
             int detectCnt = 0;
             //off
@@ -134,6 +138,7 @@ public class Game2Manager : MonoBehaviour
             }
             if (detectCnt == 0)
             {
+                pauseFlag = true;
                 detectingText.text = "인식실패";
                 detectingSign.overrideSprite = detectFail;
                 if (startFlag == false)
@@ -144,7 +149,7 @@ public class Game2Manager : MonoBehaviour
             }
             else
             {
-
+                pauseFlag = false;
                 detectPanel.SetActive(false);
                 detectingText.text = "인식중";
                 detectingSign.overrideSprite = detectSuccess;
@@ -162,10 +167,8 @@ public class Game2Manager : MonoBehaviour
                     ReadyImage.SetActive(false);
                     startFlag = true;
                 }
-
             //off
             }
-
         }
         if (Application.platform == RuntimePlatform.Android)
         {
@@ -265,16 +268,19 @@ public class Game2Manager : MonoBehaviour
         float y4 = points[102].y;
         float HorRadius = Mathf.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
         float VerRadius = Mathf.Sqrt((x3 - x4) * (x3 - x4) + (y3 - y4) * (y3 - y4));
-        float centerXInView = (x1 + x2) / 2 - 320;
-        float centerYInView = (y1 + y2) / 2 - 240;
-        float resizeX = centerXInView * (float)24 / 250;
-        float resizeY = centerYInView * (float)15.8 / 150;
-
+        //float centerXInView = (x1 + x2) / 2 - 320;
+        //float centerYInView = (y1 + y2) / 2 - 240;
+        //float resizeX = centerXInView * (float)24 / 250;
+        //float resizeY = centerYInView * (float)15.8 / 150;
+        float centerXInView = (x1 + x2) / 2 - 640;
+        float centerYInView = (y1 + y2) / 2 - 360;
+        float resizeX = centerXInView * 0.047f;
+        float resizeY = centerYInView * 0.06f;
 
         //-----------------입 그리기--------------
         Vector3 pos = new Vector3(-1 * resizeX, resizeY, 20);
         player.transform.position = pos;
-        player.transform.localScale = new Vector3(HorRadius / 12, VerRadius / 12, 1);
+        player.transform.localScale = new Vector3(HorRadius / 20, VerRadius / 10, 1);
         Quaternion PlayerAngle = Quaternion.Euler(0, 0, Mathf.Atan2(y2 - y1, x1 - x2) * 180 / Mathf.PI);
         player.transform.rotation = PlayerAngle;
 
@@ -290,11 +296,12 @@ public class Game2Manager : MonoBehaviour
         }
         //----------------눈에 x 그리기--------------
         float eyeCenterX=0;
-        float eyeCenterY=0;
         for (int i = 0; i < 2; i++)
         {
-            float eyeX = (points[104 + i].x - 320) * (float)24 / 250;
-            float eyeY = (points[104 + i].y - 240) * (float)15.8 / 150;
+            //float eyeX = (points[104 + i].x - 320) * (float)24 / 250;
+            //float eyeY = (points[104 + i].y - 240) * (float)15.8 / 150;
+            float eyeX = (points[104 + i].x - 640) * 0.047f;
+            float eyeY = (points[104 + i].y - 360) * 0.06f;
             Vector3 eyepos = new Vector3(-1 * eyeX, eyeY, 22);
             if (badFlag == true)
             {
@@ -304,7 +311,9 @@ public class Game2Manager : MonoBehaviour
             if (bad[i] != null)
             {
                 bad[i].transform.position = eyepos;
-                bad[i].transform.localScale = new Vector3(HorRadius / 17, HorRadius / 17, 1);
+                //bad[i].transform.localScale = new Vector3(HorRadius / 17, HorRadius / 17, 1);
+                bad[i].transform.localScale = new Vector3(HorRadius / 26, HorRadius / 26, 1);
+
             }
             eyeCenterX += eyeX / 2;
             eyeCenterX += eyeY / 2;
@@ -320,13 +329,17 @@ public class Game2Manager : MonoBehaviour
         float cenY = (y5 + y6) / 2;
         float FaceHorRadius = Mathf.Sqrt((x5 - x6) * (x5 - x6) + (y5 - y6) * (y5 - y6))/2;
         float FaceVerRadius = Mathf.Sqrt((cenX - points[16].x) * (cenX - points[16].x) + (cenY - points[16].y) * (cenY - points[16].y));
-        float centerXInFView = cenX - 320;
-        float centerYInFView = cenY - 240;
-        float resizeFX = centerXInFView * 0.12f;
-        float resizeFY = centerYInFView * 0.12f;
+        //float centerXInFView = cenX - 320;
+        //float centerYInFView = cenY - 240;
+        //float resizeFX = centerXInFView * 0.12f;
+        //float resizeFY = centerYInFView * 0.12f;
+        float centerXInFView = cenX - 640;
+        float centerYInFView = cenY - 360;
+        float resizeFX = centerXInFView * 0.064f;
+        float resizeFY = centerYInFView * 0.07f;
 
         face1.transform.localPosition = new Vector3(-resizeFX, resizeFY,30);
-        face1.transform.localScale = new Vector3(FaceHorRadius / 3.8f, FaceVerRadius / 3.8f, 1);
+        face1.transform.localScale = new Vector3(FaceHorRadius / 8f, FaceVerRadius / 6f, 1);
         Quaternion faceAngle = Quaternion.Euler(0, 0, Mathf.Atan2(y6 - y5, x5 - x6) * 180 / Mathf.PI);
         face1.transform.rotation = faceAngle;
 

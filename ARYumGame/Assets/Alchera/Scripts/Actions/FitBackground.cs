@@ -17,7 +17,7 @@ namespace Alchera
 #if UNITY_STANDALONE || UNITY_STANDALONE_OSX
         const float factor = 0.001627f / 2;
 #else
-        const float factor = 0.001627f;
+        const float factor = 0.001448f;
 #endif
         public GameObject plane;
         Quaternion rotation;
@@ -70,18 +70,13 @@ namespace Alchera
             // Apply current webcam's rotation Angle
             var webcam = WebCam.Current;
 
+            plane.transform.rotation = rotation * Quaternion.AngleAxis(
+                webcam.videoRotationAngle, Vector3.back);
+
             // It's front facing. Apply mirror effect
             if(webcam == WebCam.Front){
                 var mirror = new Vector3(-scale.x, scale.y, scale.z);
                 plane.transform.localScale = mirror;
-                plane.transform.rotation = rotation * Quaternion.AngleAxis(
-                    webcam.videoRotationAngle, Vector3.forward);
-
-            }
-            else{
-                plane.transform.localScale = scale;
-                plane.transform.rotation = rotation * Quaternion.AngleAxis(
-                    webcam.videoRotationAngle, Vector3.back);
             }
         }
     }
