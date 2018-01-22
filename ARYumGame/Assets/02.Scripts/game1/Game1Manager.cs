@@ -114,7 +114,7 @@ public class Game1Manager : MonoBehaviour
         var degree = 540 - webcam.videoRotationAngle;
         //off
         var frame = Alchera.FrameData.Process(tex2d);
-        if (pauseFlag == false)
+        if (pauseview.activeSelf == false)
         {
             //off
             int detectCnt = 0;
@@ -126,6 +126,7 @@ public class Game1Manager : MonoBehaviour
             }
             if (detectCnt == 0)
             {
+                pauseFlag = true;
                 detectingText.text = "인식실패";
                 detectingSign.overrideSprite = detectFail;
                 if (startFlag == false)
@@ -136,6 +137,7 @@ public class Game1Manager : MonoBehaviour
             }
             else
             {
+                pauseFlag = false;
                 detectPanel.SetActive(false);
                 detectingText.text = "인식중";
                 detectingSign.overrideSprite = detectSuccess;

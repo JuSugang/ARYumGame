@@ -21,7 +21,10 @@ public class DestroyFood : MonoBehaviour
         }
         else
         {
-            count++;
+            if (Game1Manager.instance.pauseFlag == false)
+            {
+                count++;
+            }
         }
     }
 }
