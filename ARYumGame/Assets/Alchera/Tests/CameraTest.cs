@@ -49,7 +49,7 @@ namespace Alchera
             Assert.IsTrue(webcam.requestedFPS >= WebCam.FPS);
 
             webcam.Play();
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(2);
 
             Assert.IsTrue(webcam.isPlaying);
             Assert.AreEqual(webcam.width, WebCam.Width);
@@ -70,7 +70,7 @@ namespace Alchera
         Assert.IsTrue(webcam.requestedFPS >= 30);
 
         webcam.Play();
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
 
         Assert.IsTrue(webcam.isPlaying);
         Assert.AreEqual(webcam.width, WebCam.Width);

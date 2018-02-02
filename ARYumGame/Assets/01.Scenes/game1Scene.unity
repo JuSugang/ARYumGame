@@ -2020,7 +2020,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 7b067e30d609d474ebab9b8db3ae2d75, type: 2}
+  - {fileID: 2100000, guid: 2c78e6b10bc9c48ae90bdc9436129a85, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4018,7 +4018,6 @@ MonoBehaviour:
   ReadyImage: {fileID: 824545074}
   EndImage: {fileID: 40708412}
   badImage: {fileID: 1863913005950744, guid: c88079b999bfe434aa326cc471e48d57, type: 2}
-  backgroundQuad: {fileID: 416364388}
   player: {fileID: 57058818}
   detectPanel: {fileID: 65411669}
   detectingSign: {fileID: 1179825309}
@@ -4026,7 +4025,9 @@ MonoBehaviour:
   detectSuccess: {fileID: 21300000, guid: 28dc1511861541243b7a1b68b6a98900, type: 3}
   detectFail: {fileID: 21300000, guid: a5b53eaf7a16a7b46b59b356b8eec050, type: 3}
   ScoreText: {fileID: 1214744770}
-  capture: {fileID: 2100000, guid: 7b067e30d609d474ebab9b8db3ae2d75, type: 2}
+  capture: {fileID: 2100000, guid: 2c78e6b10bc9c48ae90bdc9436129a85, type: 2}
+  backgroundQuad: {fileID: 416364388}
+  view: {fileID: 1556475681}
   badFlag: 0
   debugFlag: 1
   DebugPanel: {fileID: 961753506}
@@ -4034,6 +4035,7 @@ MonoBehaviour:
   VerTxt: {fileID: 1956376223}
   TarTxt: {fileID: 582682583}
   RealTxt: {fileID: 1282985460}
+  factor: 0
   faceCenter: {fileID: 1002575393}
 --- !u!4 &810306662
 Transform:

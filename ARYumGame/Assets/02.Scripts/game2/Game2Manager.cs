@@ -72,10 +72,10 @@ public class Game2Manager : MonoBehaviour
     void Start()
     {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
-        WebCam.Init();  //웹캠 초기화
-        webcam = WebCam.Front;    //현재 웹캠을 가져옴
+        Alchera.WebCam.Init();  //웹캠 초기화
+        webcam = Alchera.WebCam.Front;    //현재 웹캠을 가져옴
         webcam.Play();  //play한다.
-
+         
         //판을 이동시킨다.
         var transform = backgroundQuad.transform;
         transform.localPosition = new Vector3(0, 0, 70);
@@ -116,7 +116,7 @@ public class Game2Manager : MonoBehaviour
             return;
         }
 
-        webcam = WebCam.Front;
+        webcam = Alchera.WebCam.Front;
         var pixels = webcam.GetPixels32();
         var width = webcam.width;
         var height = webcam.height;
