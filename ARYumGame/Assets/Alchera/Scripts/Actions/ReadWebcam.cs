@@ -9,6 +9,7 @@
 //
 // ---------------------------------------------------------------------------
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Profiling;
 
 namespace Alchera
@@ -16,39 +17,54 @@ namespace Alchera
     public class ReadWebcam : MonoBehaviour
     {
         public Material material;
-        Texture2D tex2d;
+        Texture2D texture;
+
         Alchera.IFrameProcessor processor;
+        Alchera.FrameData frame;
+
+        public Text WebcamLabel;
 
         void Start()
         {
-            
+            frame = default(FrameData);
             processor = AppData.Get<IFrameProcessor>();
 
             WebCam.Init();
             var webcam = WebCam.Current;
 
-            tex2d = new Texture2D(webcam.requestedWidth, webcam.requestedHeight,
-                                  TextureFormat.ARGB32, false);
-            material.mainTexture = tex2d;
+            // Camera output texture. A material will hold it
+            texture = new Texture2D(webcam.requestedWidth, webcam.requestedHeight,
+                                    TextureFormat.ARGB32, false);
+            material.mainTexture = texture;
 
-            webcam.Play();
+            webcam.Play();  // Start the webcam
         }
 
+        /// <summary>
+        /// Read webcam pixel data.
+        /// Process it with library.
+        /// Forward the frame to processor.
+        /// </summary>
         void Update()
         {
-            var webcam = WebCam.Current;                
-            var pixels = webcam.GetPixels32();
+            var webcam = WebCam.Current;
+            texture.SetPixels32(0, 0, webcam.width, webcam.height, webcam.GetPixels32());
+            texture.Apply(false);
 
-            tex2d.SetPixels32(0,0, webcam.width, webcam.height, pixels);
-            tex2d.Apply(false);
+            //// Process the frame to internal format
+            // frame = Alchera.FrameData.Process(tex2d: texture);
+            //// If you want, you can read directly from camera with Read method
+            frame.Read(width:  texture.width, 
+                       height: texture.height, 
+                       colors: texture.GetPixels32());
 
-            var frame = Alchera.FrameData.Process(tex2d);
-            // Get the H/W camera rotation
-            uint degree = (uint)(540 - webcam.videoRotationAngle);
+            // H/W camera rotation  
+            var degree = (uint)webcam.videoRotationAngle;
 
             Profiler.BeginSample("FrameProcess");
             if(processor != null)
-                processor.OnFrame(frame, degree);
+                // frame + degree + facing
+                processor.OnFrame(frame, degree, webcam == WebCam.Front);
             Profiler.EndSample();
         }
 
@@ -57,7 +73,6 @@ namespace Alchera
             if(WebCam.Current)
                 WebCam.Current.Stop();
         }
-
 
     }
 

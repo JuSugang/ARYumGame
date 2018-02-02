@@ -15,6 +15,6 @@ namespace Alchera
 {
     public interface IFrameProcessor
     {
-        void OnFrame(Alchera.FrameData frame, uint degree);
+        void OnFrame(Alchera.FrameData frame, float cameraAngle, bool isFront);
     }
 }

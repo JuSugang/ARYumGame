@@ -22,7 +22,7 @@ namespace Alchera
             File.Delete(path);
         }
 
-        void CheckFile(string name)
+        void CheckFile(string name, int length)
         {
             FileStream stream = null;
             var path = Path.Combine(Application.persistentDataPath, name + ".bin");
@@ -30,6 +30,7 @@ namespace Alchera
 
             Assert.NotNull(asset);
             Assert.NotNull(asset.bytes);
+            Assert.IsTrue(asset.bytes.Length == length);
 
             try{
                 // Write and open it
@@ -52,7 +53,7 @@ namespace Alchera
         public void CheckIris(){
             var name = "alIris1205";
             CleanFile(name);
-            CheckFile(name);
+            CheckFile(name, length: 48436);
         }
 
         [Test]
@@ -60,7 +61,7 @@ namespace Alchera
         {
             var name = "facemodel";
             CleanFile(name);
-            CheckFile(name);
+            CheckFile(name, length: 2977996);
         }
 
         [Test]
@@ -68,7 +69,7 @@ namespace Alchera
         {
             var name = "facemodel_n";
             CleanFile(name);
-            CheckFile(name);
+            CheckFile(name, length: 3805516);
         }
 
         [Test]
@@ -76,10 +77,8 @@ namespace Alchera
         {
             var name = "alTotal";
             CleanFile(name);
-            CheckFile(name);
+            CheckFile(name, length: 1893999);
         }
-
-
 
     }
 
